@@ -1,6 +1,6 @@
 // ** States
 import {useEffect, useState} from "react";
-import {MODE_DELETE, MODE_LOCK, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
+import {MODE_APPROVAL, MODE_DELETE, MODE_LOCK, MODE_REJECT, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -41,6 +41,14 @@ export const ModalConfirm = ({isVisible, entityName, mode, onCancel, onSuccess})
 
     if (mode === MODE_UNLOCK) {
       setAction('mở hoạt động')
+    }
+
+    if (mode === MODE_APPROVAL) {
+      setAction('phê duyệt')
+    }
+
+    if (mode === MODE_REJECT) {
+      setAction('từ chối')
     }
   }, [isVisible])
 

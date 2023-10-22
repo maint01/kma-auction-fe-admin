@@ -294,4 +294,37 @@ export const apiBase = {
     }
   },
 
+  putFormData: async (
+    endpoint,
+    formData,
+    timeout = TIMEOUT,
+    header,
+    handleUploadProgress
+  ) => {
+    const auth = getAuthToken();
+
+    const options = {
+      method: 'PUT',
+      headers: {
+        ...header,
+        [AUTHORIZATION]: `${auth}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    if (handleUploadProgress) {
+      options.onUploadProgress = handleUploadProgress;
+    }
+    const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
+    try {
+      const res = await api.put(endpoint, formData, options);
+      clearTimeout(handleTimeout);
+
+      return res;
+    } catch (err) {
+      clearTimeout(handleTimeout);
+
+      return handleResponse(err?.response, true);
+    }
+  },
+
 };

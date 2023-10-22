@@ -7,4 +7,5 @@ export const apiUser = {
   active: (userId) => apiBase.patch(`/admin/user/${userId}:active`, {}),
   inactive: (userId) => apiBase.patch(`/admin/user/${userId}:inactive`, {}),
   getDetail: (userId) => apiBase.get(`/admin/user/${userId}`, {}),
+  getInfo: () => apiBase.get(`/admin/user/detail`, {}),
 };

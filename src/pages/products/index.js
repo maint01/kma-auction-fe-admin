@@ -10,9 +10,10 @@ import UserTable from "../../views/users/UserTable";
 import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import {useState} from "react";
-import UserForm from "../../views/users/UserForm";
+import ProductTable from "../../views/products/ProductTable";
+import ProductForm from "../../views/products/ProductForm";
 
-const UserPage = () => {
+const ProductPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [reload, setReload] = useState('');
   const [id, setId] = useState(false);
@@ -26,10 +27,10 @@ const UserPage = () => {
               <Grid item md={6}>
                 <Typography variant='h5'>
                   <Link>
-                    Users
+                    Sản phẩm
                   </Link>
                 </Typography>
-                <Typography variant='body2'>Quản trị người dùng</Typography>
+                <Typography variant='body2'>Quản trị sản phẩm</Typography>
               </Grid>
               <Grid item md={6} textAlign='right'>
                 <Button variant='outlined' color={'success'}
@@ -43,7 +44,7 @@ const UserPage = () => {
 
 
       <Grid item xs={12}>
-        <UserTable key={221321}
+        <ProductTable key={221321}
                    id={id}
                    setId={setId}
                    setIsVisible={setIsVisible}
@@ -51,13 +52,12 @@ const UserPage = () => {
                    setReload={setReload}
         />
       </Grid>
-      <UserForm id={id}
+      <ProductForm id={id}
+                isVisible={isVisible}
                 onCancel={() => {
                   setId('')
                   setIsVisible(false)
                 }}
-                isVisible={isVisible}
-                onCancel={() => setIsVisible(false)}
                 onSuccess={() => {
                   setIsVisible(false)
                   setId(null)
@@ -68,4 +68,4 @@ const UserPage = () => {
   )
 }
 
-export default UserPage
+export default ProductPage

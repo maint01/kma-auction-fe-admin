@@ -94,7 +94,7 @@ const LoginPage = () => {
   const login = async () => {
     console.log(values)
     let res = await apiAuth.login(values)
-    if (res.id_token) {
+    if (res?.id_token) {
       localStorage.setItem(ACCESS_TOKEN, res.id_token)
 
       // res = await apiAuth.getUserinfo();

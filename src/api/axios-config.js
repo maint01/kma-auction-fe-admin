@@ -62,7 +62,7 @@ instance.interceptors.response.use(
     if (originalConfig.url !== "/authenticate" && err.response) {
       // Access Token was expired
       if ([403].includes(err.response.status)) {
-        history.push("/pages/403");
+        Router.push("/pages/403");
 
         return Promise.reject(err);
       }
@@ -116,10 +116,6 @@ instance.interceptors.response.use(
     }
 
     if (err.response.status === 500) {
-      Router.push("/pages/500");
-
-      showError('Có lỗi xảy ra')
-
       return Promise.reject(err);
     }
 

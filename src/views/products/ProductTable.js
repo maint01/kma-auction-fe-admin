@@ -12,8 +12,8 @@ import Tooltip from '@mui/material/Tooltip'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import {apiUser} from "../../api/api-user";
-import {MODE_DELETE, MODE_LOCK, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
-import AccountCancelOutline from "mdi-material-ui/AccountCancelOutline";
+import {MODE_APPROVAL, MODE_DELETE, MODE_LOCK, MODE_REJECT, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
+import DeleteOutline from "mdi-material-ui/DeleteOutline";
 import AccountCheckOutline from "mdi-material-ui/AccountCheckOutline";
 import PencilOutline from "mdi-material-ui/PencilOutline";
 import {ModalConfirm} from "../common/ModalConfirm";
@@ -26,14 +26,13 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Magnify from "mdi-material-ui/Magnify";
 import {debounce} from "@mui/material";
+import {apiProduct} from "../../api/api-product";
+import moment from "moment";
+import {numberWithCommas} from "../../@core/utils/fn-common";
+import Cancel from "mdi-material-ui/Cancel";
+import CheckCircleOutlineIcon from "mdi-material-ui/CheckCircleOutline";
 
-function createData(name, code, population, size) {
-  const density = population / size
-
-  return {name, code, population, size, density}
-}
-
-const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
+const ProductTable = ({id, setId, setIsVisible, reload, setReload}) => {
   // ** States
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
@@ -51,23 +50,21 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
       minWidth: 30,
     },
     {
-      id: 'firstName',
-      label: 'Họ tên',
+      id: 'name',
+      label: 'Tên',
       minWidth: 170,
-      format: (row) => row.firstName + ' ' + row.lastName
     },
-    {id: 'email', label: 'Email', minWidth: 170},
-    {id: 'phone', label: 'Số điện thoại', minWidth: 170},
-    {id: 'code', label: 'Code', minWidth: 100},
+    {id: 'code', label: 'Mã', minWidth: 100},
+    {id: 'type', label: 'Loại', minWidth: 100},
+    {id: 'activeTime', label: 'Ngày hiệu lực', minWidth: 100, format: (row) => moment(row.activeTime).format('DD/MM/YYYY HH:mm:ss')},
+    {id: 'expireTime', label: 'Ngày hết hiệu lực', minWidth: 100, format: (row) => moment(row.expireTime).format('DD/MM/YYYY HH:mm:ss')},
+    {id: 'minPrice', label: 'Giá khởi điểm', minWidth: 100, format: (row) => <>{numberWithCommas(row.minPrice)}</>},
+    {id: 'stepFee', label: 'Bước giá', minWidth: 100, format: (row) => <>{numberWithCommas(row.stepFee)}</>},
+    {id: 'imageUrl', label: 'Hình ảnh', minWidth: 100, format: (row) => <><img style={{with: '100px', height: '80px'}} src={row.imageUrl} alt="Product image"/></>},
+    {id: 'description', label: 'Mô tả', minWidth: 170},
+    {id: 'statusAsText', label: 'Trạng thái', minWidth: 100},
     {
-      id: 'activated', label: 'Trạng thái', minWidth: 100,
-      format: (row) => row.activated ?
-        <Tooltip arrow title={'Hoạt động'} placement='top'><AccountCheckOutline color='success'/></Tooltip>
-        : <Tooltip arrow title={'Khóa'} placement='top'><AccountCancelOutline color='error'/></Tooltip>
-    },
-
-    {
-      id: 'id', label: 'Hành động', minWidth: 100,
+      id: 'id', label: 'Hành động', minWidth: 150,
       format: (row) => (
         <>
           <Tooltip arrow title={'Chỉnh sửa'} placement='top'>
@@ -78,29 +75,40 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
                            }}
             />
           </Tooltip>
-          {row.activated && (
-            <Tooltip arrow title={'Khóa hoạt động'} placement='top'>
-              <AccountCancelOutline color='error'
-                                    onClick={() => {
-                                      setId(row.id)
-                                      setMode(MODE_LOCK)
-                                      setVisibleModalConfirm(true)
-                                    }}
+          {row.status === 'PENDING' && (
+            <Tooltip arrow title={'Đóng hoạt động'} placement='top'>
+              <CheckCircleOutlineIcon color='success'
+                                      onClick={() => {
+                                        setId(row.id)
+                                        setMode(MODE_LOCK)
+                                        setVisibleModalConfirm(true)
+                                      }}
+              />
+            </Tooltip>
+          )}
+          {row.status === 'PENDING' && (
+            <Tooltip arrow title={'Mở hoạt động'} placement='top'>
+              <Cancel color='error'
+                      onClick={() => {
+                        setId(row.id)
+                        setMode(MODE_UNLOCK)
+                        setVisibleModalConfirm(true)
+                      }}
+              />
+            </Tooltip>
+          )}
+          {['PENDING', 'INACTIVE'].includes(row.status) && (
+            <Tooltip arrow title={'Xóa'} placement='top'>
+              <DeleteOutline color='error'
+                      onClick={() => {
+                        setId(row.id)
+                        setMode(MODE_DELETE)
+                        setVisibleModalConfirm(true)
+                      }}
               />
             </Tooltip>
           )}
 
-          {!row.activated && (
-            <Tooltip arrow title={'Mở hoạt động'} placement='top'>
-              <AccountCheckOutline color='success'
-                                   onClick={() => {
-                                     setId(row.id)
-                                     setMode(MODE_UNLOCK)
-                                     setVisibleModalConfirm(true)
-                                   }}
-              />
-            </Tooltip>
-          )}
 
         </>
       )
@@ -131,13 +139,17 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
   const handleConfirmed = async () => {
     let res;
     if (mode === MODE_LOCK) {
-      res = await apiUser.inactive(id);
+      res = await apiProduct.inactive(id);
     }
     if (mode === MODE_UNLOCK) {
-      res = await apiUser.active(id);
+      res = await apiProduct.active(id);
+    }
+
+    if (mode === MODE_DELETE) {
+      res = await apiProduct.delete(id);
     }
     if (res?.code === SUCCESS) {
-      showSuccess(`${mode === MODE_UNLOCK ? 'Khóa hoạt động' : 'Mở hoạt động'} thành công`)
+      showSuccess(`${mode === MODE_DELETE ? 'Xóa' : (mode === MODE_UNLOCK ? 'Khóa hoạt động' : 'Mở hoạt động')} sản phẩm thành công`)
       setId(null)
       setMode('')
       setVisibleModalConfirm(false)
@@ -154,7 +166,7 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
 
   const doSearch = async () => {
     setDataSource([])
-    const res = await apiUser.doSearch({page, size, keyword});
+    const res = await apiProduct.doSearch({page, size, keyword});
     if (res?.code === SUCCESS) {
       const data = res.data.content.map((item, index) => {
         return {...item, index: page * size + index + 1}
@@ -236,9 +248,8 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
         </Paper>
         <ModalConfirm isVisible={visibleModalConfirm}
                       mode={mode}
-                      entityName={'người dùng'}
+                      entityName={'sản phẩm'}
                       onCancel={() => {
-
                         setVisibleModalConfirm(false)
                       }}
                       onSuccess={() => {
@@ -250,4 +261,4 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
   )
 }
 
-export default UserTable
+export default ProductTable

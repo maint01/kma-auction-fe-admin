@@ -1,14 +1,9 @@
 // ** Icon imports
-import Login from 'mdi-material-ui/Login'
-import Table from 'mdi-material-ui/Table'
-import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
-import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
-import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
-import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import Gavel from 'mdi-material-ui/Gavel'
+import Cast from 'mdi-material-ui/Cast'
+import History from 'mdi-material-ui/History'
 
 const navigation = () => {
   return [
@@ -17,17 +12,25 @@ const navigation = () => {
       icon: HomeOutline,
       path: '/'
     },
-
- /*   {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
-    },*/
-
     {
       title: 'Người dùng',
       icon: AccountCogOutline,
       path: '/users'
+    },
+    {
+      title: 'Sản phẩm',
+      icon: Cast,
+      path: '/products'
+    },
+    {
+      title: 'Yêu cầu đấu giá',
+      icon: Gavel,
+      path: '/auction'
+    },
+    {
+      title: 'Lịch sử đấu giá',
+      icon: History,
+      path: '/auction-history'
     }
   ]
 }

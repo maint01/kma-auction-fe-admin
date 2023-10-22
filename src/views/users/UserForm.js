@@ -69,7 +69,7 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
 
   const loadDetail = async () => {
     const res = await apiUser.getDetail(id)
-    if (res.code === SUCCESS) {
+    if (res?.code === SUCCESS) {
       setValues(res.data)
 
       return
@@ -91,7 +91,7 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
       res = await apiUser.create(data)
     }
     setIsLoading(false)
-    if (res.code === SUCCESS) {
+    if (res?.code === SUCCESS) {
       showSuccess(`${id ? 'Cập nhât' : 'Tạo mới'} thành công`)
       resetForm()
       onSuccess()
@@ -227,7 +227,10 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
             </CardContent>
             <CardActions>
               <Grid item xs={12} display='flex' justifyContent="flex-end">
-                <Button type='reset' variant='outlined' color='secondary' sx={{marginRight: 3.5}} onClick={onCancel}>
+                <Button type='reset' variant='outlined' color='secondary' sx={{marginRight: 3.5}} onClick={() => {
+                  resetForm()
+                  onCancel()
+                }}>
                   Cancel
                 </Button>
                 <Button variant='contained' onClick={() => onSave()} disabled={isLoading}>

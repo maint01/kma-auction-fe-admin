@@ -1,5 +1,5 @@
 // ** React Imports
-import {useEffect, useImperativeHandle, useState} from 'react'
+import {useEffect, useState} from 'react'
 
 // ** MUI Imports
 import Paper from '@mui/material/Paper'
@@ -11,13 +11,11 @@ import TableCell from '@mui/material/TableCell'
 import Tooltip from '@mui/material/Tooltip'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
-import {apiUser} from "../../api/api-user";
-import {MODE_DELETE, MODE_LOCK, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
-import AccountCancelOutline from "mdi-material-ui/AccountCancelOutline";
-import AccountCheckOutline from "mdi-material-ui/AccountCheckOutline";
-import PencilOutline from "mdi-material-ui/PencilOutline";
+import {MODE_APPROVAL, MODE_LOCK, MODE_REJECT, MODE_UNLOCK, SUCCESS} from "../../configs/constant";
+import CheckCircleOutlineIcon from 'mdi-material-ui/CheckCircleOutline';
+import Cancel from 'mdi-material-ui/Cancel';
 import {ModalConfirm} from "../common/ModalConfirm";
-import {showSuccess} from "../../@core/utils/message";
+import {showError, showSuccess} from "../../@core/utils/message";
 import CardHeader from "@mui/material/CardHeader";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -26,14 +24,10 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Magnify from "mdi-material-ui/Magnify";
 import {debounce} from "@mui/material";
+import {apiAuction} from "../../api/api-auction";
+import {apiAuctionHistory} from "../../api/api-auction-history";
 
-function createData(name, code, population, size) {
-  const density = population / size
-
-  return {name, code, population, size, density}
-}
-
-const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
+const AuctionHistoryTable = ({id, setId, reload, setReload}) => {
   // ** States
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
@@ -50,60 +44,22 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
       label: '#',
       minWidth: 30,
     },
+    {id: 'userCode', label: 'Mã người dùng', minWidth: 100},
+    {id: 'username', label: 'Tên đăng nhập', minWidth: 100},
     {
-      id: 'firstName',
-      label: 'Họ tên',
+      id: 'productCode',
+      label: 'Mã sản phẩm',
       minWidth: 170,
-      format: (row) => row.firstName + ' ' + row.lastName
     },
-    {id: 'email', label: 'Email', minWidth: 170},
-    {id: 'phone', label: 'Số điện thoại', minWidth: 170},
-    {id: 'code', label: 'Code', minWidth: 100},
     {
-      id: 'activated', label: 'Trạng thái', minWidth: 100,
-      format: (row) => row.activated ?
-        <Tooltip arrow title={'Hoạt động'} placement='top'><AccountCheckOutline color='success'/></Tooltip>
-        : <Tooltip arrow title={'Khóa'} placement='top'><AccountCancelOutline color='error'/></Tooltip>
+      id: 'productName',
+      label: 'Tên sản phẩm',
+      minWidth: 170,
     },
-
     {
-      id: 'id', label: 'Hành động', minWidth: 100,
-      format: (row) => (
-        <>
-          <Tooltip arrow title={'Chỉnh sửa'} placement='top'>
-            <PencilOutline color='primary'
-                           onClick={() => {
-                             setId(row.id)
-                             setIsVisible(true)
-                           }}
-            />
-          </Tooltip>
-          {row.activated && (
-            <Tooltip arrow title={'Khóa hoạt động'} placement='top'>
-              <AccountCancelOutline color='error'
-                                    onClick={() => {
-                                      setId(row.id)
-                                      setMode(MODE_LOCK)
-                                      setVisibleModalConfirm(true)
-                                    }}
-              />
-            </Tooltip>
-          )}
-
-          {!row.activated && (
-            <Tooltip arrow title={'Mở hoạt động'} placement='top'>
-              <AccountCheckOutline color='success'
-                                   onClick={() => {
-                                     setId(row.id)
-                                     setMode(MODE_UNLOCK)
-                                     setVisibleModalConfirm(true)
-                                   }}
-              />
-            </Tooltip>
-          )}
-
-        </>
-      )
+      id: 'statusAsText',
+      label: 'Trạng thái',
+      minWidth: 170,
     },
   ]
 
@@ -130,14 +86,14 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
 
   const handleConfirmed = async () => {
     let res;
-    if (mode === MODE_LOCK) {
-      res = await apiUser.inactive(id);
+    if (mode === MODE_REJECT) {
+      res = await apiAuction.reject(id);
     }
-    if (mode === MODE_UNLOCK) {
-      res = await apiUser.active(id);
+    if (mode === MODE_APPROVAL) {
+      res = await apiAuction.confirm(id);
     }
     if (res?.code === SUCCESS) {
-      showSuccess(`${mode === MODE_UNLOCK ? 'Khóa hoạt động' : 'Mở hoạt động'} thành công`)
+      showSuccess(`${MODE_UNLOCK ? 'Phê duyệt' : 'Từ chối'} yêu cầu thành công`)
       setId(null)
       setMode('')
       setVisibleModalConfirm(false)
@@ -154,7 +110,7 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
 
   const doSearch = async () => {
     setDataSource([])
-    const res = await apiUser.doSearch({page, size, keyword});
+    const res = await apiAuctionHistory.doSearch({page, size, keyword});
     if (res?.code === SUCCESS) {
       const data = res.data.content.map((item, index) => {
         return {...item, index: page * size + index + 1}
@@ -234,20 +190,9 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-        <ModalConfirm isVisible={visibleModalConfirm}
-                      mode={mode}
-                      entityName={'người dùng'}
-                      onCancel={() => {
-
-                        setVisibleModalConfirm(false)
-                      }}
-                      onSuccess={() => {
-                        handleConfirmed()
-                      }}
-        />
       </Card>
     </>
   )
 }
 
-export default UserTable
+export default AuctionHistoryTable
