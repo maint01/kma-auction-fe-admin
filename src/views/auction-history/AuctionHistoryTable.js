@@ -56,11 +56,6 @@ const AuctionHistoryTable = ({id, setId, reload, setReload}) => {
       label: 'Tên sản phẩm',
       minWidth: 170,
     },
-    {
-      id: 'statusAsText',
-      label: 'Trạng thái',
-      minWidth: 170,
-    },
   ]
 
   useEffect(async () => {

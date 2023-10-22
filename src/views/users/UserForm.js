@@ -119,40 +119,29 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
               <Grid container spacing={5}>
                 <Grid item xs={12}>
                   <TextField
+                    required
                     fullWidth
                     label='Họ'
                     placeholder='Họ'
                     id='firstName'
                     value={values.firstName}
                     onChange={handleChange('firstName')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <AccountOutline/>
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    required
                     fullWidth
                     label='Tên'
                     placeholder='Tên'
                     id='lastName'
                     value={values.lastName}
                     onChange={handleChange('lastName')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <AccountOutline/>
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    required
                     fullWidth
                     label='Tên đăng nhập'
                     placeholder='Tên đăng nhập'
@@ -160,17 +149,11 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     id='username'
                     value={values.username}
                     onChange={handleChange('username')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <AccountOutline/>
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    required
                     fullWidth
                     id='email'
                     type='email'
@@ -178,51 +161,33 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     placeholder='carterleonard@gmail.com'
                     value={values.email}
                     onChange={handleChange('email')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <EmailOutline/>
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    required
                     fullWidth
                     id='phone'
                     label='Số điện thoại'
                     placeholder='+1-123-456-8790'
                     value={values.phone}
                     onChange={handleChange('phone')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <Phone/>
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id='password'
-                    type='password'
-                    label='Mật khẩu'
-                    placeholder='*****'
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <FormTextboxPassword/>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
+                {!id && (
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id='password'
+                      type='password'
+                      label='Mật khẩu'
+                      placeholder='*****'
+                      value={values.password}
+                      onChange={handleChange('password')}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </CardContent>
             <CardActions>

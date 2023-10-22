@@ -62,7 +62,6 @@ instance.interceptors.response.use(
     if (originalConfig.url !== "/authenticate" && err.response) {
       // Access Token was expired
       if ([403].includes(err.response.status)) {
-        Router.push("/pages/403");
 
         return Promise.reject(err);
       }

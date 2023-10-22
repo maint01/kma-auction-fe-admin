@@ -1,5 +1,5 @@
 // ** Icon imports
-import HomeOutline from 'mdi-material-ui/HomeOutline'
+// import HomeOutline from 'mdi-material-ui/HomeOutline'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import Gavel from 'mdi-material-ui/Gavel'
 import Cast from 'mdi-material-ui/Cast'
@@ -7,11 +7,6 @@ import History from 'mdi-material-ui/History'
 
 const navigation = () => {
   return [
-    {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
     {
       title: 'Người dùng',
       icon: AccountCogOutline,

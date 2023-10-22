@@ -21,10 +21,18 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+import {useRouter} from "next/router";
+import {useEffect} from "react";
 
 const Dashboard = () => {
+  const router = useRouter()
+
+  useEffect(() => router.push('/users'), [])
+
   return (
-    <ApexChartWrapper>
+    <></>
+
+   /* <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <Trophy />
@@ -94,7 +102,7 @@ const Dashboard = () => {
           <Table />
         </Grid>
       </Grid>
-    </ApexChartWrapper>
+    </ApexChartWrapper>*/
   )
 }
 
