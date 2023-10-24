@@ -200,7 +200,7 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
                     fullWidth
                     format={'dd/MM/yyyy hh:mm aa'}
                     style={{with: '100%'}}
-                    id='fromDate'
+                    id='toDate'
                     label='Đến ngày'
                     toolbarPlaceholder='Chọn đến ngày'
                     value={toDate}
