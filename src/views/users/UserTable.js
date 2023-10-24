@@ -26,6 +26,7 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Magnify from "mdi-material-ui/Magnify";
 import {debounce} from "@mui/material";
+import {DateTimePicker} from "@mui/x-date-pickers/DateTimePicker";
 
 function createData(name, code, population, size) {
   const density = population / size
@@ -35,6 +36,8 @@ function createData(name, code, population, size) {
 
 const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
   // ** States
+  const [fromDate, setFromDate] = useState(null)
+  const [toDate, setToDate] = useState(null)
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
   const [keyword, setKeyword] = useState('')
@@ -117,7 +120,7 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
     } else {
       doSearch()
     }
-  }, [reload, keyword])
+  }, [reload, keyword, fromDate, toDate])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -154,7 +157,12 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
 
   const doSearch = async () => {
     setDataSource([])
-    const res = await apiUser.doSearch({page, size, keyword});
+
+    const res = await apiUser.doSearch({
+      page, size, keyword,
+      fromDate: fromDate ? fromDate.getTime() : null,
+      toDate: toDate ? toDate.getTime() : null
+    });
     if (res?.code === SUCCESS) {
       const data = res.data.content.map((item, index) => {
         return {...item, index: page * size + index + 1}
@@ -170,8 +178,35 @@ const UserTable = ({id, setId, setIsVisible, reload, setReload}) => {
         <CardHeader title={
           <>
             <Grid container spacing={6}>
-              <Grid item xs={6}></Grid>
-              <Grid item xs={6} display="flex" justifyContent="flex-end">
+              <Grid item xs={12} display="flex" justifyContent="flex-end">
+                <Box className='actions-left' sx={{mr: 2, display: 'flex', alignItems: 'center'}}>
+                  <DateTimePicker
+                    slotProps={{ textField: { size: 'small' } }}
+                    required
+                    fullWidth
+                    format={'dd/MM/yyyy hh:mm aa'}
+                    style={{with: '100%'}}
+                    id='fromDate'
+                    label='Từ ngày'
+                    toolbarPlaceholder='Chọn từ ngày'
+                    value={fromDate}
+                    onChange={(date) => setFromDate(date)} >
+                  </DateTimePicker>
+                </Box>
+                <Box className='actions-left' sx={{mr: 2, display: 'flex', alignItems: 'center'}}>
+                  <DateTimePicker
+                    slotProps={{ textField: { size: 'small' } }}
+                    required
+                    fullWidth
+                    format={'dd/MM/yyyy hh:mm aa'}
+                    style={{with: '100%'}}
+                    id='fromDate'
+                    label='Đến ngày'
+                    toolbarPlaceholder='Chọn đến ngày'
+                    value={toDate}
+                    onChange={(date) => setToDate(date)} >
+                  </DateTimePicker>
+                </Box>
                 <Box className='actions-left' sx={{mr: 2, display: 'flex', alignItems: 'center'}}>
                   <TextField
                     size='small'

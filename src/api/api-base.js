@@ -29,16 +29,6 @@ const redirectToSomethingWentWrongScreen = () => {
 export const apiBase = {
   get: async (endpoint, params, timeout = TIMEOUT, isAuth) => {
     let options = {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
 
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
@@ -57,16 +47,6 @@ export const apiBase = {
   },
   getFile: async (endpoint, params, timeout = TIMEOUT) => {
     let options = {};
-    const auth = getAuthToken();
-    if (auth) {
-      options = {
-        headers: {
-          [AUTHORIZATION]: `${auth}`,
-        },
-        responseType: 'blob',
-      };
-    }
-
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
       const res = await api.get(
@@ -84,16 +64,6 @@ export const apiBase = {
   },
   post: async (endpoint, params, timeout = TIMEOUT, isAuth) => {
     let options = {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
 
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
@@ -107,45 +77,8 @@ export const apiBase = {
       return handleResponse(err?.response, isAuth);
     }
   },
-  postFile2: async (endpoint, params, timeout = TIMEOUT, isAuth, options) => {
-    options = options ? options : {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          ...options,
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
-
-    const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
-    try {
-      const res = await api.post(endpoint, {...params}, options);
-      clearTimeout(handleTimeout);
-
-      return res;
-    } catch (err) {
-      clearTimeout(handleTimeout);
-
-      return handleResponse(err?.response, isAuth);
-    }
-  },
   postFile: async (endpoint, params, timeout = TIMEOUT) => {
     let options = {};
-    const auth = getAuthToken();
-    if (auth) {
-      options = {
-        headers: {
-          [AUTHORIZATION]: `${auth}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        responseType: 'blob',
-        observe: 'response',
-      };
-    }
 
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
@@ -186,16 +119,6 @@ export const apiBase = {
   },
   put: async (endpoint, params, timeout = TIMEOUT, isAuth) => {
     let options = {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
       const res = await api.put(endpoint, {...params}, options);
@@ -210,16 +133,7 @@ export const apiBase = {
   },
   patch: async (endpoint, params, timeout = TIMEOUT, isAuth) => {
     let options = {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
+
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
       const res = await api.patch(endpoint, {...params}, options);
@@ -235,16 +149,7 @@ export const apiBase = {
   },
   delete: async (endpoint, params, timeout = TIMEOUT, isAuth) => {
     let options = {};
-    if (isAuth) {
-      const auth = getAuthToken();
-      if (auth) {
-        options = {
-          headers: {
-            [AUTHORIZATION]: `${auth}`,
-          },
-        };
-      }
-    }
+
     const handleTimeout = redirectToSomethingWentWrongScreen(timeout);
     try {
       const res = await api.delete(
@@ -274,7 +179,6 @@ export const apiBase = {
       method: 'POST',
       headers: {
         ...header,
-        [AUTHORIZATION]: `${auth}`,
         'Content-Type': 'multipart/form-data',
       },
     };
@@ -307,7 +211,6 @@ export const apiBase = {
       method: 'PUT',
       headers: {
         ...header,
-        [AUTHORIZATION]: `${auth}`,
         'Content-Type': 'multipart/form-data',
       },
     };

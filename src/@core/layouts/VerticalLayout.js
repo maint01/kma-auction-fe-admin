@@ -87,7 +87,7 @@ const VerticalLayout = props => {
             {children}
           </ContentWrapper>
 
-          <Footer {...props} />
+          {/*<Footer {...props} />*/}
 
           <DatePickerWrapper sx={{ zIndex: 11 }}>
             <Box id='react-datepicker-portal'></Box>

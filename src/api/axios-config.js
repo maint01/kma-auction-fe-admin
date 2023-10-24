@@ -118,6 +118,19 @@ instance.interceptors.response.use(
       return Promise.reject(err);
     }
 
+
+    if (err.response.status === 400) {
+      const error = err?.response?.data
+      if (error && error[0]) {
+        error.forEach((error) => showError(error.message))
+      } else {
+        showError(error.error)
+      }
+
+
+      return Promise.reject(err);
+    }
+
     return Promise.reject(err);
   }
 )

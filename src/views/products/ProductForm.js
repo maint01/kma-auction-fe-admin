@@ -174,7 +174,7 @@ const ProductForm = ({id, isVisible, onSuccess, onCancel}) => {
       aria-labelledby="keep-modal-title"
       aria-describedby="keep-modal-description"
     >
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
       <Box sx={style}>
         <form onSubmit={e => {
           e.preventDefault()
@@ -346,7 +346,7 @@ const ProductForm = ({id, isVisible, onSuccess, onCancel}) => {
           </Card>
         </form>
       </Box>
-      </LocalizationProvider>
+      {/*</LocalizationProvider>*/}
     </Modal>
   )
 }

@@ -19,6 +19,7 @@ import EmailOutline from "mdi-material-ui/EmailOutline";
 import Phone from "mdi-material-ui/Phone";
 import FormTextboxPassword from "mdi-material-ui/FormTextboxPassword";
 import {showError, showSuccess} from "../../@core/utils/message";
+import {validations} from "../../@core/utils/utils-validation";
 
 const style = {
   position: 'absolute',
@@ -42,8 +43,58 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
     phone: '',
     password: ''
   })
+
+  const [firstName, setFirstName] = useState({value: '', error: '', help: ''})
+  const [lastName, setLastName] = useState({value: '', error: '', help: ''})
+  const [username, setUsername] = useState({value: '', error: '', help: ''})
+  const [email, setEmail] = useState({value: '', error: '', help: ''})
+  const [phone, setPhone] = useState({value: '', error: '', help: ''})
+  const [password, setPassword] = useState({value: '', error: '', help: ''})
   const [isLoading, setIsLoading] = useState(false)
 
+  const validateFirstNameField = (target) => {
+    return validations(target, setFirstName, "Họ", {
+      isRequired: true,
+      maxLength: 100,
+    });
+  };
+
+  const validateLastNameField = (target) => {
+    return validations(target, setLastName, "Họ", {
+      isRequired: true,
+      maxLength: 100,
+    });
+  };
+
+  const validateUsernameField = (target) => {
+    return validations(target, setUsername, "Tên đăng nhập", {
+      isRequired: true,
+      maxLength: 100,
+    });
+  };
+
+  const validateEmailField = (target) => {
+    return validations(target, setEmail, "Email", {
+      isRequired: true,
+      isMail: true,
+      maxLength: 100,
+    });
+  };
+
+  const validatePhoneField = (target) => {
+    return validations(target, setPhone, "Số điện thoại", {
+      isRequired: true,
+      isPhone: true,
+      maxLength: 16,
+    });
+  };
+
+  const validatePasswordField = (target) => {
+    return validations(target, setPassword, "Mật khẩu", {
+      isRequired: true,
+      maxLength: 100,
+    });
+  };
 
   useEffect(() => {
     if (!isVisible || !id) {
@@ -57,20 +108,22 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
   }
 
   const resetForm = () => {
-    setValues({
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
-      phone: '',
-      password: ''
-    })
+    setFirstName({value: '', error: '', help: ''})
+    setLastName({value: '', error: '', help: ''})
+    setUsername({value: '', error: '', help: ''})
+    setEmail({value: '', error: '', help: ''})
+    setPhone({value: '', error: '', help: ''})
+    setPassword({value: '', error: '', help: ''})
   }
 
   const loadDetail = async () => {
     const res = await apiUser.getDetail(id)
     if (res?.code === SUCCESS) {
-      setValues(res.data)
+      setFirstName({value: res.data.firstName, error: '', help: ''})
+      setLastName({value: res.data.lastName, error: '', help: ''})
+      setUsername({value: res.data.username, error: '', help: ''})
+      setEmail({value: res.data.email, error: '', help: ''})
+      setPhone({value: res.data.phone, error: '', help: ''})
 
       return
     }
@@ -81,7 +134,24 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
     if (isLoading) {
       return;
     }
-    const data = {...values}
+    if (!validateFirstNameField(firstName) ||
+      !validateLastNameField(lastName) ||
+      !validateUsernameField(username) ||
+      !validateEmailField(email) ||
+      !validatePhoneField(phone) ||
+      !validatePasswordField(password)
+    ) {
+      return;
+    }
+
+    const data = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      username: username.value,
+      email: email.value,
+      phone: phone.value,
+      password: password.value,
+    }
     let res;
     setIsLoading(true)
     if (id) {
@@ -92,14 +162,16 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
     }
     setIsLoading(false)
     if (res?.code === SUCCESS) {
-      showSuccess(`${id ? 'Cập nhât' : 'Tạo mới'} thành công`)
+      showSuccess(`${id ? 'Cập nhât' : 'Tạo mới'} nguười dùng thành công`)
       resetForm()
       onSuccess()
 
       return;
     }
-
-    showError(res?.data?.error)
+    const error = res?.data;
+    if (error && error[0]) {
+      res?.data?.data?.forEach((error) => showError(error.error))
+    }
   }
 
   return (
@@ -124,8 +196,11 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     label='Họ'
                     placeholder='Họ'
                     id='firstName'
-                    value={values.firstName}
-                    onChange={handleChange('firstName')}
+                    error={firstName.error}
+                    helperText={firstName.help}
+                    value={firstName.value}
+                    onChange={e => setFirstName({...firstName, value: e.target.value})}
+                    onBlur={() => validateFirstNameField(firstName)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -135,8 +210,11 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     label='Tên'
                     placeholder='Tên'
                     id='lastName'
-                    value={values.lastName}
-                    onChange={handleChange('lastName')}
+                    error={lastName.error}
+                    helperText={lastName.help}
+                    value={lastName.value}
+                    onChange={e => setLastName({...lastName, value: e.target.value})}
+                    onBlur={() => validateLastNameField(lastName)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -147,8 +225,12 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     placeholder='Tên đăng nhập'
                     disabled={id}
                     id='username'
-                    value={values.username}
-                    onChange={handleChange('username')}
+                    error={username.error}
+                    helperText={username.help}
+                    value={username.value}
+                    onChange={e => setUsername({...username, value: e.target.value})}
+                    onBlur={() => validateUsernameField(username)}
+
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -156,22 +238,26 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                     required
                     fullWidth
                     id='email'
-                    type='email'
                     label='Email'
-                    placeholder='carterleonard@gmail.com'
-                    value={values.email}
-                    onChange={handleChange('email')}
+                    error={email.error}
+                    helperText={email.help}
+                    value={email.value}
+                    onChange={e => setEmail({...email, value: e.target.value})}
+                    onBlur={() => validateEmailField(email)}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     required
                     fullWidth
-                    id='phone'
+                    placeholder='098....'
                     label='Số điện thoại'
-                    placeholder='+1-123-456-8790'
-                    value={values.phone}
-                    onChange={handleChange('phone')}
+                    id='phone'
+                    error={phone.error}
+                    helperText={phone.help}
+                    value={phone.value}
+                    onChange={e => setPhone({...phone, value: e.target.value})}
+                    onBlur={() => validatePhoneField(phone)}
                   />
                 </Grid>
                 {!id && (
@@ -183,8 +269,11 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
                       type='password'
                       label='Mật khẩu'
                       placeholder='*****'
-                      value={values.password}
-                      onChange={handleChange('password')}
+                      error={password.error}
+                      helperText={password.help}
+                      value={password.value}
+                      onChange={e => setPassword({...password, value: e.target.value})}
+                      onBlur={() => validatePasswordField(password)}
                     />
                   </Grid>
                 )}

@@ -89,10 +89,10 @@ const UserLayout = ({ children }) => {
           />
         )}
       >
-        {/*<LocalizationProvider dateAdapter={AdapterDayjs}>*/}
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
         {children}
         {/*<UpgradeToProButton />*/}
-        {/*</LocalizationProvider>*/}
+        </LocalizationProvider>
       </VerticalLayout>
   )
 }

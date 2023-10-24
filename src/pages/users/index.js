@@ -15,7 +15,7 @@ import UserForm from "../../views/users/UserForm";
 const UserPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [reload, setReload] = useState('');
-  const [id, setId] = useState(false);
+  const [id, setId] = useState('');
 
   return (
     <Grid container spacing={6}>
@@ -57,7 +57,6 @@ const UserPage = () => {
                   setIsVisible(false)
                 }}
                 isVisible={isVisible}
-                onCancel={() => setIsVisible(false)}
                 onSuccess={() => {
                   setIsVisible(false)
                   setId(null)
