@@ -46,7 +46,7 @@ export const validations = (target, setCallback, label, option, isValidate) => {
   ) {
     setCallback({
       ...target,
-      error: "error",
+      error: true,
       help: `Vui lòng nhập ${label}`,
     });
 
@@ -61,7 +61,7 @@ export const validations = (target, setCallback, label, option, isValidate) => {
   ) {
     setCallback({
       ...target,
-      error: "error",
+      error: true,
       help: `Vui lòng nhập đúng định dạng email`,
     });
 
@@ -76,7 +76,7 @@ export const validations = (target, setCallback, label, option, isValidate) => {
   ) {
     setCallback({
       ...target,
-      error: "error",
+      error: true,
       help: `Vui lòng nhập đúng định dạng ${label}`,
     });
 
@@ -90,7 +90,7 @@ export const validations = (target, setCallback, label, option, isValidate) => {
   ) {
     setCallback({
       ...target,
-      error: "error",
+      error: true,
       help: `Vui lòng nhập ${label} không quá ${option.maxLength} ký tự`,
     });
 
@@ -105,14 +105,14 @@ export const validations = (target, setCallback, label, option, isValidate) => {
   ) {
     setCallback({
       ...target,
-      error: "error",
+      error: true,
       help: `Vui lòng nhập đúng định dạng ${label}`,
     });
 
     return false;
   }
 
-  setCallback({ value: target.value, error: "", help: "" });
+  setCallback({ value: target.value, error: false, help: "" });
 
   return true;
 };

@@ -44,12 +44,12 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
     password: ''
   })
 
-  const [firstName, setFirstName] = useState({value: '', error: '', help: ''})
-  const [lastName, setLastName] = useState({value: '', error: '', help: ''})
-  const [username, setUsername] = useState({value: '', error: '', help: ''})
-  const [email, setEmail] = useState({value: '', error: '', help: ''})
-  const [phone, setPhone] = useState({value: '', error: '', help: ''})
-  const [password, setPassword] = useState({value: '', error: '', help: ''})
+  const [firstName, setFirstName] = useState({value: '', error: false, help: ''})
+  const [lastName, setLastName] = useState({value: '', error: false, help: ''})
+  const [username, setUsername] = useState({value: '', error: false, help: ''})
+  const [email, setEmail] = useState({value: '', error: false, help: ''})
+  const [phone, setPhone] = useState({value: '', error: false, help: ''})
+  const [password, setPassword] = useState({value: '', error: false, help: ''})
   const [isLoading, setIsLoading] = useState(false)
 
   const validateFirstNameField = (target) => {
@@ -108,22 +108,22 @@ const UserForm = ({id, isVisible, onSuccess, onCancel}) => {
   }
 
   const resetForm = () => {
-    setFirstName({value: '', error: '', help: ''})
-    setLastName({value: '', error: '', help: ''})
-    setUsername({value: '', error: '', help: ''})
-    setEmail({value: '', error: '', help: ''})
-    setPhone({value: '', error: '', help: ''})
-    setPassword({value: '', error: '', help: ''})
+    setFirstName({value: '', error: false, help: ''})
+    setLastName({value: '', error: false, help: ''})
+    setUsername({value: '', error: false, help: ''})
+    setEmail({value: '', error: false, help: ''})
+    setPhone({value: '', error: false, help: ''})
+    setPassword({value: '', error: false, help: ''})
   }
 
   const loadDetail = async () => {
     const res = await apiUser.getDetail(id)
     if (res?.code === SUCCESS) {
-      setFirstName({value: res.data.firstName, error: '', help: ''})
-      setLastName({value: res.data.lastName, error: '', help: ''})
-      setUsername({value: res.data.username, error: '', help: ''})
-      setEmail({value: res.data.email, error: '', help: ''})
-      setPhone({value: res.data.phone, error: '', help: ''})
+      setFirstName({value: res.data.firstName, error: false, help: ''})
+      setLastName({value: res.data.lastName, error: false, help: ''})
+      setUsername({value: res.data.username, error: false, help: ''})
+      setEmail({value: res.data.email, error: false, help: ''})
+      setPhone({value: res.data.phone, error: false, help: ''})
 
       return
     }
