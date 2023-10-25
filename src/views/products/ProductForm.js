@@ -45,6 +45,8 @@ const ProductForm = ({id, isVisible, onSuccess, onCancel}) => {
     description: '',
     minPrice: '',
     stepFee: '',
+    deposit: '',
+    registrationFee: '',
     registrationStartTime: null,
     registrationEndTime: null,
     activeTime: null,
@@ -231,11 +233,12 @@ const ProductForm = ({id, isVisible, onSuccess, onCancel}) => {
                     onChange={handleChange('description')}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     required
                     aria-errormessage={'dsadsa'}
                     fullWidth
+                    style={{height: '80%'}}
                     id='minPrice'
                     label='Giá khởi điểm'
                     placeholder='Nhập giá khởi điểm'
@@ -243,15 +246,40 @@ const ProductForm = ({id, isVisible, onSuccess, onCancel}) => {
                     onChange={handleChange('minPrice')}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     required
                     fullWidth
+                    style={{height: '80%'}}
                     id='stepFee'
                     label='Bước giá'
                     placeholder='Bước giá'
                     value={values.stepFee}
                     onChange={handleChange('stepFee')}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    style={{height: '80%'}}
+                    id='deposit'
+                    label='Phí ứng trước'
+                    placeholder='Phí ứng trước'
+                    value={values.deposit}
+                    onChange={handleChange('deposit')}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    style={{height: '80%'}}
+                    id='registrationFee'
+                    label='Phí đăng ký'
+                    placeholder='Phí đăng ký'
+                    value={values.registrationFee}
+                    onChange={handleChange('registrationFee')}
                   />
                 </Grid>
                 <Grid item xs={6}>

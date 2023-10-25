@@ -120,7 +120,7 @@ instance.interceptors.response.use(
       return Promise.reject(err);
     }
 
-    if ([400, 406].includes(err.response.status)) {
+    if ([400, 406, 409].includes(err.response.status)) {
       const error = err?.response?.data
       if (error && error[0]) {
         error.forEach((error) => showError(error.message))
