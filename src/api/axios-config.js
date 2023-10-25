@@ -4,9 +4,6 @@ import {
   REFRESH_TOKEN,
   SUCCESS,
 } from "../configs/constant";
-import {useEffect} from "react";
-import {Router} from 'next/router'
-import {toast} from "react-toastify";
 import {showError} from "../@core/utils/message";
 
 // import moment from "moment";
@@ -58,6 +55,11 @@ instance.interceptors.response.use(
     return res;
   },
   (err) => {
+    if (!err.response) {
+      showError('Dịch vụ gián đoạn. Xin vui lòng liên hệ quản trị viên')
+
+      return
+    }
     const originalConfig = err.config;
     if (originalConfig.url !== "/authenticate" && err.response) {
       // Access Token was expired
@@ -118,8 +120,7 @@ instance.interceptors.response.use(
       return Promise.reject(err);
     }
 
-
-    if (err.response.status === 400) {
+    if ([400, 406].includes(err.response.status)) {
       const error = err?.response?.data
       if (error && error[0]) {
         error.forEach((error) => showError(error.message))
