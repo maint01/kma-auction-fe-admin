@@ -1,0 +1,11 @@
+
+[javascript:S1128"3Remove this unused import of 'useImperativeHandle'.(–ßûûÿÿÿÿ8êÕŠ›¹1
+Ojavascript:S1128"'Remove this unused import of 'apiUser'.(·î¬¾üÿÿÿÿ8íÕŠ›¹1
+Pjavascript:S1128"-Remove this unused import of 'MODE_APPROVAL'.(ÑúëË8íÕŠ›¹1
+Njavascript:S1128"+Remove this unused import of 'MODE_REJECT'.(ÑúëË8ïÕŠ›¹1
+[javascript:S1128"3Remove this unused import of 'AccountCheckOutline'.(ˆ½¬öúÿÿÿÿ8ñÕŠ›¹1
+‚javascript:S6478>"ŞDo not define components during render. React will see a new component type on every render and destroy the entire subtree\u8217s DOM nodes and state. Instead, move this component definition out of the parent component \u8220ProductTable\u8221 and pass data as props. If you want to allow component creation in props, set allowAsProps option to true.(èöÿÀ8òÕŠ›¹1
+‡javascript:S6478?"ŞDo not define components during render. React will see a new component type on every render and destroy the entire subtree\u8217s DOM nodes and state. Instead, move this component definition out of the parent component \u8220ProductTable\u8221 and pass data as props. If you want to allow component creation in props, set allowAsProps option to true.(Ôã‚ùÿÿÿÿ8òÕŠ›¹1
+‡javascript:S6478@"ŞDo not define components during render. React will see a new component type on every render and destroy the entire subtree\u8217s DOM nodes and state. Instead, move this component definition out of the parent component \u8220ProductTable\u8221 and pass data as props. If you want to allow component creation in props, set allowAsProps option to true.(ôçˆ¹ùÿÿÿÿ8òÕŠ›¹1
+‡javascript:S6478I"ŞDo not define components during render. React will see a new component type on every render and destroy the entire subtree\u8217s DOM nodes and state. Instead, move this component definition out of the parent component \u8220ProductTable\u8221 and pass data as props. If you want to allow component creation in props, set allowAsProps option to true.(ô¬ÇÍÿÿÿÿÿ8óÕŠ›¹1
+hjavascript:S3358"DExtract this nested ternary operation into an independent statement.(Ü‰‚§8óÕŠ›¹1

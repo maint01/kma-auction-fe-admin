@@ -4,6 +4,7 @@ import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import Gavel from 'mdi-material-ui/Gavel'
 import Cast from 'mdi-material-ui/Cast'
 import History from 'mdi-material-ui/History'
+import Aution from 'mdi-material-ui/History'
 
 const navigation = () => {
   return [
@@ -26,6 +27,11 @@ const navigation = () => {
       title: 'Lịch sử đấu giá',
       icon: History,
       path: '/auction-history'
+    },
+    {
+      title: 'Tham gia đấu giá',
+      icon: Aution,
+      path: '/auction-action'
     }
   ]
 }

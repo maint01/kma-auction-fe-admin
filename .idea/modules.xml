@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../kma-auction-api/auction.iml" filepath="$PROJECT_DIR$/../kma-auction-api/auction.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/kma-auction-fe-admin.iml" filepath="$PROJECT_DIR$/.idea/kma-auction-fe-admin.iml" />
     </modules>
   </component>

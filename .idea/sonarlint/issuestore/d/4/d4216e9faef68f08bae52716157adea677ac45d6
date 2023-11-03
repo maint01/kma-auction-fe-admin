@@ -1,0 +1,3 @@
+
+Qjavascript:S1128")Remove this unused import of 'MODE_LOCK'.(‰‰¨Áüÿÿÿÿ8¥ØŠ›¹1
+‚javascript:S6478D"ŞDo not define components during render. React will see a new component type on every render and destroy the entire subtree\u8217s DOM nodes and state. Instead, move this component definition out of the parent component \u8220AuctionTable\u8221 and pass data as props. If you want to allow component creation in props, set allowAsProps option to true.(İ–Œ8¦ØŠ›¹1
